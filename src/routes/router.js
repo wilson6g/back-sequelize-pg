@@ -1,20 +1,27 @@
 const express = require('express');
-const { createUserInterface, listAllInterface } = require('../interface/user-interface/user-interface');
+const { createUserInterface, listAllInterface, deleteUserInterface } = require('../interface/user-interface/user-interface');
 const router = express.Router();
 
-router.get('/user', async (req, res) => {
-  const listAll = await listAllInterface(req);
+router.get('/user', async (request, response) => {
+  const listAll = await listAllInterface();
 
-  res.status(listAll.statusCode).json(listAll).send();
+  return response.json({ data: listAll });
 });
 
-router.post('/user', async (req, res) => {
-  const { firstName, lastName } = req.body;
-  res.setHeader('Content-Type', 'application/json');
+router.delete('/user/:id', async (request, response) => {
+  const { id } = request.params;
+
+  const deletedUser = await deleteUserInterface(id);
+
+  return response.status(204).json({ data: deletedUser });
+})
+
+router.post('/user', async (request, response) => {
+  const { firstName, lastName } = request.body;
 
   const newUser = await createUserInterface(firstName, lastName);
 
-  res.status(newUser.statusCode).json(newUser).send();
+  return response.status(201).json({ data: newUser });
 });
 
 module.exports = router;

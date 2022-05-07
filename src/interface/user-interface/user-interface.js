@@ -1,30 +1,21 @@
-const { create, listAll } = require('../../infrastructure/repository/user-repository/user-registration-repository');
-const httpStatusResponse = require('../../commons/http-response/http-status-response');
-// const listAll = require('../../infrastructure/repository/user-repository/user-registration-repository');
+const { create, listAll, deleteById } = require('../../infrastructure/repository/user-repository/user-registration-repository');
 
 const createUserInterface = async (firstName, lastName) => {
-  try {
-    const isUserCreated = await create(firstName, lastName);
+  const isUserCreated = await create(firstName, lastName);
 
-    if (isUserCreated) {
-      return httpStatusResponse(201, 'User created with successfully!');
-    }
+  return isUserCreated;
+};
 
-  } catch (error) {
-    return httpStatusResponse(400, 'Failed to create user!', 'repository');
-  }
+const deleteUserInterface = async (id) => {
+  const isDeleted = await deleteById(id);
+
+  return isDeleted;
 };
 
 const listAllInterface = async () => {
-  try {
-    const isUsers = await listAll();
+  const isUsers = await listAll();
 
-    if (isUsers) {
-      return httpStatusResponse(200, isUsers);
-    }
-  } catch (error) {
-    return httpStatusResponse(400, 'Failed to list users!', 'repository');
-  }
+  return isUsers;
 }
 
-module.exports = { listAllInterface, createUserInterface };
+module.exports = { listAllInterface, createUserInterface, deleteUserInterface };
