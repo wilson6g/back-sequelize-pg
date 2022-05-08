@@ -5,7 +5,7 @@ const router = express.Router();
 router.get('/user', async (request, response) => {
   const listAll = await listAllInterface();
 
-  return response.json({ data: listAll });
+  return response.status(200).json({ data: listAll });
 });
 
 router.delete('/user/:id', async (request, response) => {
